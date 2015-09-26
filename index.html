@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width initial-scale=1.0">
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="app.css">
+    <title>Neighborhood Map</title>
+</head>
+<body>
+
+<!-- Container - whole screen -->
+<div class="container">
+  <div class="row">
+  	<div id="outer-map" class="col-md-12">
+
+	<!-- Container for list of places on map -->
+ 	<div class="col-md-4" id="list">
+ 		<ul data-bind="foreach: location">
+        	<li data-bind="text: name"></li>
+    	</ul>
+ 	</div>
+
+ 	<!-- Container for map from Google Maps -->
+	<div id="map-container" class="col-md-8"></div>
+
+    </div> <!-- outer-map -->
+
+  </div> <!-- row -->
+</div> <!-- container -->
+
+
+    <script src="js/lib/knockout-3.2.0.js"></script>
+    <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB9u8jvLe4jCSdwm9voWimcTRb5owbqht4&callback=initMap">
+    </script>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="js/jquery-1.11.2.min.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

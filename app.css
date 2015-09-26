@@ -1,0 +1,6 @@
+html, body { height: 100%; margin: 0; padding: 0; }
+#map-container {height: 400px }
+#map-outer {height: 440px;
+			padding:20px;
+}
+#map {height: 100%}
