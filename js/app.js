@@ -3,85 +3,31 @@
 //function Model() {
 //(note from Mark: lists of markers, places and other data)
 //}
-// var MODEL = new modle();
+// var MODEL = new model();
 //function ViewModel() {
 // define observables here; define and use Google Map objects; create other functions to communicate with
 // the model, observables, and Google Map objects
 //  }
 
-//var map;
-function initMap() {
-	var westford = {lat: 42.579167, lng: -71.438333};
-  var mapOptions = {
-    center: westford,
-    zoom: 17
-    //disableDefaultUI: true
-  }
-  var map = new google.maps.Map(document.getElementById('map-container'),mapOptions);
-
-
-// created var mapoptions and moved map creation to var map, which allowed disableDefaultUI to work but broke custom marker
-
-
-var contentString = '<p>' + 'Home of the Grey Ghosts' + '</p>';
-
-var infowindow = new google.maps.InfoWindow({
-  content: contentString
-});
-
-var marker = new google.maps.Marker({     //markers should b in the Model
-    position: westford,
-    map: map,
-    title: 'Westford Center'
-  });
-
-  marker.addListener('click', function() {
-    infowindow.open(map, marker);
-  });
-
-//  var panorama = new google.maps.StreetViewPanorama(
-  //    document.getElementById('pano'), {
-  //      position: westford,
-  //      pov: {
-  //        heading: 34,
-  //        pitch: 10
-  //      }
-  //    });
-  //map.setStreetView(panorama);
-};
-
-//ViewModel
-// InfoWindow
-
-
-
-function LocationsViewModel() {
- var self = this;
-
- //Hard-coded locatsions - these should be in Model as they are data? yes, but then, in ViewModel, need to use
- // something like this.getAllLocations = ko.computed(function() {
-//                    return model.Locations();
-//                });
- }
 var locations = [
   {
-   name: "Westford Common",
-   //marker: null
-   //  showItem: function(event, marker){}
-   //content: API
-   //latlong:
+   name: "Lowell, MA",
+   marker: " ",
+   content: "test 1",
+   latlng: {lat: 42.639444, lng: -71.314722}
+   //infoWindow -- array of properties
   },
   {
-    name: "Parish Center for the Arts",
-    //marker:
-    //content:
-    //lat and lang:
+    name: "Pawtucket Canal",
+    marker: " ",
+    content: "test 2",
+    latlng: {lat: 42.644167, lng: -71.305833}
   },
   {
-    name: "Fletcher Library",
-    //marker: activateMarker();
-    //content:
-    //lat and long: 42.587874, -71.434396
+    name: "UMass Lowell",
+    marker: " ",
+    content: 'http://en.wikipedia.org/w/api.php?action=opensearch&search=UMass,Lowell&format=json&callback=wikiCallback',
+    latlng: {lat: 42.642716, lng: -71.33453}
   },
   {
     name: "Roudenbush Center",
@@ -90,11 +36,200 @@ var locations = [
     name: "Westford Knight",
     //marker:
     //content:
-    //lat and long : 42.587874, -71.434396
+    //latlng : 42.587874, -71.434396
   }
 
 ];
- self.location = ko.observableArray(locations);
+
+//var markersArray = [];
+
+//var location = function(data) {
+//  this.name = ko.observable(data.name);
+//};
+
+// ViewModel
+
+//function viewModel() { //moved from line 116,117
+//  var self = this;
+
+// Google ViewModel
+//Create map of Lowell
+
+function initMap() {
+	var lowell = {lat: 42.639444, lng: -71.314722};
+  var mapOptions = {
+    center: lowell,
+    zoom: 14,
+    disableDefaultUI: true
+  }
+  var map = new google.maps.Map(document.getElementById('map-container'),mapOptions);
+
+
+// created var mapoptions and moved map creation to var map, which allowed disableDefaultUI to work but broke custom marker
+
+
+//Create the InfoWindow and Marker
+
+//var contentString = '<p>' + 'Home of the Grey Ghosts' + '</p>';
+
+// Using jQuery
+//$.ajax( {
+//    url: 'https://en.wikipedia.org/w/api.php',
+    //data: queryData,
+//    dataType: 'json',
+//    type: 'POST',
+//    headers: { 'Api-User-Agent': 'MapMashup/1.0 joconnorje@gmail.com' },
+//    done: function(data) {
+//       var contentString = '<p>' + data + '</p>'
+//    }
+//} );
+
+// Search and Get articles using Wikipedia API
+//    var wikiURL = 'http://en.wikipedia.org/w/api.php?action=opensearch&search=' + locations[2].name + '&format=json&callback=wikiCallback';
+//    console.log(wikiURL);
+
+//Use timeout (can clear timeout below to stand in for error handling. jsonp does not have built-in error handling.)
+
+   // var wikiRequestTimeout = setTimeout(function() {
+   //     var wikiElem = "failed to get Wikipedia resources";
+   // }, 8000);
+
+    //Get and Parse the response from Wikipedia and append to html body as a list of links. (s/b in ViewModel)
+    $.ajax({
+        //url: locations[2].wikiURL;
+        url: locations[2].content,
+        dataType: "jsonp",
+     //   method: "POST",
+        //url: "http://en.wikipedia.org/w/api.php?action=query&prop=revisions&rvprop=content&format=json&callback=wikiCallback",
+        //data: { location: city }
+      })
+      .done(function(data) {
+            //article = locations[2].content;
+
+            console.log(data);
+          })
+
+     //    var article = response;
+           // for (var i = articleList.length - 1; i >= 0; i--) {
+           //     articleString = articleList[i];
+           //     var url = 'http://en.wikipedia.org/wiki' + articleString;
+
+
+        //clearTimeout(wikiRequestTimeout);
+    //    }
+    //});
+
+
+    //return false;
+    //};
+
+// Get info from Wikipedia
+//$.getJSON('https://en.wikipedia.org/w/api.php?callback=?', function(results) {
+      //    myCallback(results, infowindow);
+//});
+
+
+//Put wikipedia info in infoWindow
+//function myCallback (article, infowindow) {
+    //handle my data in here
+//};
+
+
+
+
+var currentLocation = locations[2];
+console.log(currentLocation);
+
+//get input from search or select on currentLocation and set infowindow to currentLocation
+
+var infowindow = new google.maps.InfoWindow({
+  content: currentLocation.content, //set content to currentLocation
+  //marker: currentMarker   how to tie infowindow to marker?
+  //content: '<p>' + data[0] + '</p>'
+});
+
+//};
+
+// For each location, create a marker
+//var markersArray = [];
+for (var i =0; i < locations.length; i++) {
+  var marker = new google.maps.Marker({
+    position: locations[i].latlng,
+    map: map,
+    animation: google.maps.Animation.DROP,
+    title: locations[2].name,
+    content: "check"
+  });
+  //markersArray.push;
+  //marker=locations[i].marker;
+  marker.addListener('click', function() {  //on click, open infoWindow for each marker
+    infowindow.open(map, marker);
+  });
+  //var currentMarker = markersArray[2];
+  locations[i].marker = marker;     // Add marker to locations data in Model
+}
+
+//var currentMarker = markersArray[2];
+console.log(locations[2].marker);
+
+
+//function setMarker() {
+//  map.setCenter(new google.maps.LatLng(locations.latlng) );
+//}
+//var currentMarker = markersArray[2];
+//var marker = new google.maps.Marker({     //markers should be in the Model
+//    position: locations[2].latlng,
+//    map: map,
+//    animation: google.maps.Animation.DROP,
+//    title: locations[2].name,
+//    content: "check"
+//  });
+
+  //marker.addListener('click', function() {
+  //  infowindow.open(map, currentMarker);
+  //});
+
+// Displays infoWindow when marker is clicked
+ // function markerDisplay() {
+ //   infowindow.open(map, currentMarker);
+ // };
+
+}; //end of InitMap (Model  ViewModel)
+
+
+
+function viewModel() {
+  var self = this;
+
+ //Hard-coded locations - these should be in Model as they are data? yes, but then, in ViewModel, need to use
+ // something like this.getAllLocations = ko.computed(function() {
+//                    return model.Locations();
+//                });
+ //}
+
+  self.locationsList = ko.observableArray(locations);
+  //self.locationsList = ko.observableArray(locations.slice(0) );
+  //self.markersArray = ko.observableArray(markersArray);
+
+  self.setMarker = function() {
+    console.log('click works');
+    //map.setCenter(new google.maps.LatLng(locations.latlng ) );
+    //map.setCenter(marker.getPosition());
+    //location.marker.setAnimation(google.maps.Animation.DROP);
+    //infowindow.open(map,location.marker);
+  }
+  //this.locationsList = ko.observableArray(locations.slice(1) );  //would need to get marker into locations list from markersArray
+
+ // initialLocations.forEach(function(locationItem) {
+  //  self.locationsList.push(new location(locationItem) );
+
+
+ // this.currentLocation = ko.observable(this.locationsList()[0] );
+
+
+ // Create list of locations
+
+
 
   //infooWindow: function(item) {                   infoWindow object should be in Model
   //  display.infoWindow(item.name.toLowerCase());
@@ -106,12 +241,11 @@ var locations = [
 
 //}
 
-  ko.applyBindings(new LocationsViewModel());
+};
+// Run it
+ko.applyBindings(new viewModel() );
 
-//function activateMarker() {
-//  console.log("marker");
-//}
-//);
+
 
 // function searchLocations ()  get text from input and use to filter locations list
 
