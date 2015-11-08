@@ -99,6 +99,7 @@ function initMap() {
         //url: locations[2].wikiURL;
         url: locations[2].content,
         dataType: "jsonp",
+        headers: { 'Api-User-Agent': 'MapMashup/1.0 joconnorje@gmail.com' },
      //   method: "POST",
         //url: "http://en.wikipedia.org/w/api.php?action=query&prop=revisions&rvprop=content&format=json&callback=wikiCallback",
         //data: { location: city }
@@ -137,16 +138,15 @@ function initMap() {
 
 
 
-var currentLocation = locations[2];
+var currentLocation = locations[2]; // test; don't need these 2 lines
 console.log(currentLocation);
 
-//get input from search or select on currentLocation and set infowindow to currentLocation
-
-var infowindow = new google.maps.InfoWindow({
-  content: currentLocation.content, //set content to currentLocation
+//Define initial infowindow and set content for currentLocation
+  var infowindow = new google.maps.InfoWindow({
+    content: currentLocation.content, //set content to currentLocation
   //marker: currentMarker   how to tie infowindow to marker?
   //content: '<p>' + data[0] + '</p>'
-});
+  });
 
 //};
 
@@ -160,8 +160,7 @@ for (var i =0; i < locations.length; i++) {
     title: locations[2].name,
     content: "check"
   });
-  //markersArray.push;
-  //marker=locations[i].marker;
+
   marker.addListener('click', function() {  //on click, open infoWindow for each marker
     infowindow.open(map, marker);
   });
@@ -170,7 +169,7 @@ for (var i =0; i < locations.length; i++) {
 }
 
 //var currentMarker = markersArray[2];
-console.log(locations[2].marker);
+console.log(locations[1].marker);
 
 
 //function setMarker() {
@@ -211,12 +210,17 @@ function viewModel() {
   //self.locationsList = ko.observableArray(locations.slice(0) );
   //self.markersArray = ko.observableArray(markersArray);
 
-  self.setMarker = function() {
+
+  self.setMarker = function(locations) {
     console.log('click works');
     //map.setCenter(new google.maps.LatLng(locations.latlng ) );
     //map.setCenter(marker.getPosition());
-    //location.marker.setAnimation(google.maps.Animation.DROP);
-    //infowindow.open(map,location.marker);
+    locations.marker.setAnimation(google.maps.Animation.DROP); //activate associated marker
+    //infowindow.open(map,locations.marker); //infowindow, map not available in local scope?
+    google.maps.event.trigger(locations.marker, 'click'); //open infowindow associated with marker
+    //var infowindow = new google.maps.InfoWindow({
+    //});
+    //infowindow.open(map,locations.marker);
   }
   //this.locationsList = ko.observableArray(locations.slice(1) );  //would need to get marker into locations list from markersArray
 
