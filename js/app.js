@@ -1,11 +1,9 @@
 // Model
 
-//function Model() {
-//(note from Mark: lists of markers, places and other data)
-//}
-// var MODEL = new model();
+// use var MODEL = new model(); ?
+
 //function ViewModel() {
-// define observables here; define and use Google Map objects; create other functions to communicate with
+// define observables here; create other functions to communicate with
 // the model, observables, and Google Map objects
 //  }
 
@@ -164,17 +162,11 @@ for (var i =0; i < locations.length; i++) {
   });
   locations[i].marker = marker; //Add marker to locations data in Model
 
-  //Define initial infowindow and set content for current location
-  //var infowindow = new google.maps.InfoWindow()
-  //{
-  // content: locations[i].content //set content to currentLocation
-  //marker: currentMarker   how to tie infowindow to marker?
-  //content: '<p>' + data[0] + '</p>'
-  //};
-
+//Get content for current location from data model
   content = locations[i].content;
 
-  marker.addListener('click', function(content) {  //on click, open infoWindow for each marker
+//Add listener for marker and open infowindow with current location content
+  marker.addListener('click', function(content) {  //on click, open infoWindow
     //content = locations[i].content;
     infowindow.setContent(content.toString());
     infowindow.open(map, marker);
@@ -218,6 +210,10 @@ function viewModel() {
  // something like this.getAllLocations = ko.computed(function() {
 //                    return model.Locations();
 //                });
+//function ViewModel() {
+// define observables here; create other functions to communicate with
+// the model, observables, and Google Map objects
+//  }
  //}
 
   self.locationsList = ko.observableArray(locations);
@@ -267,17 +263,6 @@ ko.applyBindings(new viewModel() );
 
 // function searchLocations ()  get text from input and use to filter locations list
 
-//Class to represent a place in the Places list
-//function  currentPlace(name) {
- // var self = this;
- // self.name = name;
-//}
-
-// Overall ViewModel for the page with initial values
-
-//Current Place data from the GoogleMaps API
 
 
-//View - should include map render?
-// search bar, List View, Map  using Knockout
 
