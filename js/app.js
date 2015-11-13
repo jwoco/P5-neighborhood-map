@@ -46,7 +46,7 @@ var locations = [
 //var location = function(data) {
 //  this.name = ko.observable(data.name);
 //};
-
+console.log(locations[2].content);
 // ViewModel
 
 //function viewModel() { //moved from line 116,117
@@ -142,13 +142,17 @@ var currentLocation = locations[2]; // test; don't need these 2 lines
 console.log(currentLocation);
 
 //Define initial infowindow and set content for currentLocation
-  var infowindow = new google.maps.InfoWindow({
-    content: currentLocation.content, //set content to currentLocation
+  var infowindow = new google.maps.InfoWindow(
+    {
+    //infowindow.setContent(locations[i].content);
+    //content: self.locations.content//set content to currentLocation
+    //content: locations[i].content
+    content: 'content'
   //marker: currentMarker   how to tie infowindow to marker?
   //content: '<p>' + data[0] + '</p>'
   });
+  //};
 
-//};
 
 // For each location, create a marker
 //var markersArray = [];
@@ -157,19 +161,30 @@ for (var i =0; i < locations.length; i++) {
     position: locations[i].latlng,
     map: map,
     animation: google.maps.Animation.DROP,
-    title: locations[2].name,
-    content: "check"
   });
+  locations[i].marker = marker; //Add marker to locations data in Model
 
-  marker.addListener('click', function() {  //on click, open infoWindow for each marker
+  //Define initial infowindow and set content for current location
+  //var infowindow = new google.maps.InfoWindow()
+  //{
+  // content: locations[i].content //set content to currentLocation
+  //marker: currentMarker   how to tie infowindow to marker?
+  //content: '<p>' + data[0] + '</p>'
+  //};
+
+  content = locations[i].content;
+
+  marker.addListener('click', function(content) {  //on click, open infoWindow for each marker
+    //content = locations[i].content;
+    infowindow.setContent(content.toString());
     infowindow.open(map, marker);
   });
   //var currentMarker = markersArray[2];
-  locations[i].marker = marker;     // Add marker to locations data in Model
 }
 
 //var currentMarker = markersArray[2];
 console.log(locations[1].marker);
+console.log(locations[1].content);
 
 
 //function setMarker() {
@@ -192,8 +207,7 @@ console.log(locations[1].marker);
  // function markerDisplay() {
  //   infowindow.open(map, currentMarker);
  // };
-
-}; //end of InitMap (Model  ViewModel)
+};  //end of InitMap (Model  ViewModel)
 
 
 
@@ -216,7 +230,7 @@ function viewModel() {
     //map.setCenter(new google.maps.LatLng(locations.latlng ) );
     //map.setCenter(marker.getPosition());
     locations.marker.setAnimation(google.maps.Animation.DROP); //activate associated marker
-    //infowindow.open(map,locations.marker); //infowindow, map not available in local scope?
+    //this.infowindow.setContent(locations.content); //infowindow, map not available in local scope?
     google.maps.event.trigger(locations.marker, 'click'); //open infowindow associated with marker
     //var infowindow = new google.maps.InfoWindow({
     //});
