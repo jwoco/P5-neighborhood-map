@@ -18,7 +18,7 @@
 
 	      <!-- Container for list of places on map -->
  	      <div class="col-md-4" id="list">
- 		     <ul data-bind="foreach: locationsList">
+ 		     <ul data-bind="foreach: search()">
                <li>
                 <button data-bind="text: name,
                 click: $root.setMarker">
@@ -26,6 +26,14 @@
                 </li>
             </ul>
  	      </div>
+
+        <!-- Search input box. Search filters list display and marker display of locations (ref: John Mav's demo)
+    -->
+        <div class="col-md-4" id="searchbox">
+            <p>Search:
+            <input type="search" data-bind="textInput: query, valueUpdate: 'keyup'"> </input>
+            </p>
+        </div>
 
  	    <!-- Container for map from Google Maps -->
 	   <div id="map-container" class="col-md-8"></div>

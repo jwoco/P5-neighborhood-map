@@ -106,7 +106,7 @@ function initMap() {
             //article = locations[2].content;
 
             console.log(data);
-          })
+      });
 
      //    var article = response;
            // for (var i = articleList.length - 1; i >= 0; i--) {
@@ -136,8 +136,8 @@ function initMap() {
 
 
 
-var currentLocation = locations[2]; // test; don't need these 2 lines
-console.log(currentLocation);
+//var currentLocation = locations[2]; // test; don't need these 2 lines
+//console.log(currentLocation);
 
 //Define initial infowindow and set content for currentLocation
   var infowindow = new google.maps.InfoWindow(
@@ -145,7 +145,7 @@ console.log(currentLocation);
     //infowindow.setContent(locations[i].content);
     //content: self.locations.content//set content to currentLocation
     //content: locations[i].content
-    content: 'content'
+    content: 'initial infowindow content'
   //marker: currentMarker   how to tie infowindow to marker?
   //content: '<p>' + data[0] + '</p>'
   });
@@ -163,14 +163,15 @@ for (var i =0; i < locations.length; i++) {
   locations[i].marker = marker; //Add marker to locations data in Model
 
 //Get content for current location from data model
-  content = locations[i].content;
+  var content = locations[i].content;
 
 //Add listener for marker and open infowindow with current location content
-  marker.addListener('click', function(content) {  //on click, open infoWindow
-    //content = locations[i].content;
-    infowindow.setContent(content.toString());
-    infowindow.open(map, marker);
-  });
+  marker.addListener('click', (function(markerRef, contentString) {  //on click, open infoWindow
+    return function() {
+    infowindow.setContent(contentString);
+    infowindow.open(map, markerRef);
+  }
+  })(marker,content));
   //var currentMarker = markersArray[2];
 }
 
@@ -245,13 +246,37 @@ function viewModel() {
 
 
 
-  //infooWindow: function(item) {                   infoWindow object should be in Model
+  //infoWindow: function(item) {                   infoWindow object should be in Model
   //  display.infoWindow(item.name.toLowerCase());
   //},
 
   //query:
 
-  //search:
+  //to read or write and observables value, you call it as a function
+  //get current observable array (locationsList), then hide/show locations based on search value
+  // var currentLocs = this.locationsList();
+  //
+
+  //self.searchLoc = function(location) {
+   // viewModel.locationsList([]);
+   // for(var x in locationsList()) {
+   //   if (locationsList[x].name.toLowerCase().indexOf(value.toLowerCase()) >= 0)
+   //     viewModel.locationsList.push(locationsList[x]);
+
+   //   console.log(locationsList);
+
+   // }
+  //}
+
+  self.query = ko.observable('');
+
+  self.search = ko.computed(function(){
+    return ko.utils.arrayFilter(self.locationsList(), function(locations){
+      return locations.name.toLowerCase().indexOf(self.query().toLowerCase()) >= 0;
+    });
+  });
+
+//};
 
 //}
 
