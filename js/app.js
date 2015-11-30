@@ -1,11 +1,4 @@
-// Model
-
-// use var MODEL = new model(); ?
-
-//function ViewModel() {
-// define observables here; create other functions to communicate with
-// the model, observables, and Google Map objects
-//  }
+// Model - contains data used by the ViewModel and user interface
 
 var locations = [
   {
@@ -13,7 +6,6 @@ var locations = [
    marker: " ",
    content: "test 1",
    latlng: {lat: 42.639444, lng: -71.314722}
-   //infoWindow -- array of properties
   },
   {
     name: "Pawtucket Canal",
@@ -36,7 +28,6 @@ var locations = [
     //content:
     //latlng : 42.587874, -71.434396
   }
-
 ];
 
 //var markersArray = [];
@@ -45,22 +36,16 @@ var locations = [
 //  this.name = ko.observable(data.name);
 //};
 console.log(locations[2].content);
-// ViewModel
 
-//function viewModel() { //moved from line 116,117
-//  var self = this;
+//Create map of Lowell using Google Maps API
 
-// Google ViewModel
-//Create map of Lowell
-
-function initMap() {
 	var lowell = {lat: 42.639444, lng: -71.314722};
   var mapOptions = {
     center: lowell,
     zoom: 14,
     disableDefaultUI: true
   }
-  var map = new google.maps.Map(document.getElementById('map-container'),mapOptions);
+  self.map = new google.maps.Map(document.getElementById('map-container'),mapOptions);
 
 
 // created var mapoptions and moved map creation to var map, which allowed disableDefaultUI to work but broke custom marker
@@ -92,7 +77,13 @@ function initMap() {
    //     var wikiElem = "failed to get Wikipedia resources";
    // }, 8000);
 
-    //Get and Parse the response from Wikipedia and append to html body as a list of links. (s/b in ViewModel)
+//ViewModel contains functions that work with the data (locations) and the user interface (html).
+// The ViewModel has fucntions that operate on the user interface by using the KnockOut (wwww.knockoutjs.com) framework.
+
+function viewModel() {
+  var self = this;
+
+    //For each location, get content from Wikipedia API. Content will be displayed in Google Maps infowindow, when a lcoation marker is clicked.
     $.ajax({
         //url: locations[2].wikiURL;
         url: locations[2].content,
@@ -141,29 +132,42 @@ function initMap() {
 
 //Define initial infowindow and set content for currentLocation
   var infowindow = new google.maps.InfoWindow(
-    {
-    //infowindow.setContent(locations[i].content);
-    //content: self.locations.content//set content to currentLocation
-    //content: locations[i].content
-    content: 'initial infowindow content'
-  //marker: currentMarker   how to tie infowindow to marker?
-  //content: '<p>' + data[0] + '</p>'
+  {
+   content: 'initial infowindow content'
   });
   //};
 
 
 // For each location, create a marker
 //var markersArray = [];
-for (var i =0; i < locations.length; i++) {
-  var marker = new google.maps.Marker({
-    position: locations[i].latlng,
+
+locations.forEach(function(locations) {
+  //create a marker on the map
+ marker = new google.maps.Marker({
+    position: locations.latlng,
     map: map,
+    content: locations.content,
     animation: google.maps.Animation.DROP,
   });
-  locations[i].marker = marker; //Add marker to locations data in Model
+//});
+ //create an infowindow to open when marker is clicked
+ //marker.infowindow = new google.maps.InfoWindow(
+ //{
+  //content: 'initial infowindow content'
+ //});
+
+//for (var i =0; i < locations.length; i++) {
+//  var marker = new google.maps.Marker({
+//    position: locations[i].latlng,
+//    map: map,
+//    animation: google.maps.Animation.DROP,
+//  });
+//  locations[i].marker = marker; //Add marker to locations data in Model
 
 //Get content for current location from data model
-  var content = locations[i].content;
+  //var content = locations[i].content;
+
+//Needs to be in forEach
 
 //Add listener for marker and open infowindow with current location content
   marker.addListener('click', (function(markerRef, contentString) {  //on click, open infoWindow
@@ -171,51 +175,14 @@ for (var i =0; i < locations.length; i++) {
     infowindow.setContent(contentString);
     infowindow.open(map, markerRef);
   }
-  })(marker,content));
+  })(marker,locations.content));
   //var currentMarker = markersArray[2];
-}
+}); //end forEach
 
 //var currentMarker = markersArray[2];
-console.log(locations[1].marker);
-console.log(locations[1].content);
+console.log(locations[2].marker);
+//console.log(locations[1].content);
 
-
-//function setMarker() {
-//  map.setCenter(new google.maps.LatLng(locations.latlng) );
-//}
-//var currentMarker = markersArray[2];
-//var marker = new google.maps.Marker({     //markers should be in the Model
-//    position: locations[2].latlng,
-//    map: map,
-//    animation: google.maps.Animation.DROP,
-//    title: locations[2].name,
-//    content: "check"
-//  });
-
-  //marker.addListener('click', function() {
-  //  infowindow.open(map, currentMarker);
-  //});
-
-// Displays infoWindow when marker is clicked
- // function markerDisplay() {
- //   infowindow.open(map, currentMarker);
- // };
-};  //end of InitMap (Model  ViewModel)
-
-
-
-function viewModel() {
-  var self = this;
-
- //Hard-coded locations - these should be in Model as they are data? yes, but then, in ViewModel, need to use
- // something like this.getAllLocations = ko.computed(function() {
-//                    return model.Locations();
-//                });
-//function ViewModel() {
-// define observables here; create other functions to communicate with
-// the model, observables, and Google Map objects
-//  }
- //}
 
   self.locationsList = ko.observableArray(locations);
   //self.locationsList = ko.observableArray(locations.slice(0) );
@@ -226,9 +193,9 @@ function viewModel() {
     console.log('click works');
     //map.setCenter(new google.maps.LatLng(locations.latlng ) );
     //map.setCenter(marker.getPosition());
-    locations.marker.setAnimation(google.maps.Animation.DROP); //activate associated marker
+    marker.setAnimation(google.maps.Animation.DROP); //activate associated marker
     //this.infowindow.setContent(locations.content); //infowindow, map not available in local scope?
-    google.maps.event.trigger(locations.marker, 'click'); //open infowindow associated with marker
+    google.maps.event.trigger(marker, 'click'); //open infowindow associated with marker
     //var infowindow = new google.maps.InfoWindow({
     //});
     //infowindow.open(map,locations.marker);
@@ -280,7 +247,7 @@ function viewModel() {
 
 //}
 
-};
+}; //end of ViewModel
 // Run it
 ko.applyBindings(new viewModel() );
 
