@@ -18,7 +18,7 @@
 
 	      <!-- Container for list of places on map -->
  	      <div class="col-md-4" id="list">
- 		     <ul data-bind="foreach: search()">
+ 		     <ul data-bind="foreach: locationsList()">
                <li>
                 <button data-bind="text: name,
                 click: $root.setMarker">
@@ -31,7 +31,7 @@
     -->
         <div class="col-md-4" id="searchbox">
             <p>Search:
-            <input type="search" data-bind="textInput: query, valueUpdate: 'keyup' "> </input>
+            <input type="search" data-bind="textInput: query, event: {keyup: filteringFunction}"> </input>
             </p>
         </div>
 
@@ -45,8 +45,8 @@
 <!--
     <script src="js/knockout-3.3.0.js"></script> -->
 
-    <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB9u8jvLe4jCSdwm9voWimcTRb5owbqht4">
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB9u8jvLe4jCSdwm9voWimcTRb5owbqht4&callback=initMap">
     </script>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="js/jquery-1.11.2.min.js"></script>
