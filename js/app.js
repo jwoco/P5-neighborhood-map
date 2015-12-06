@@ -171,9 +171,10 @@ for (var i = 0; i < locations.length; i++) {
 function viewModel() {
   var self = this;
 
+  //self.locationsList = ko.observableArray(locations.slice(0));
   self.locationsList = ko.observableArray(locations);
-  self.filteredList = ko.observableArray(locations.slice(0) );
-  self.markersList = ko.observableArray(locations.marker);
+  //self.filteredList = ko.observableArray();
+  //self.markersList = ko.observableArray(locations.marker);
   //self.markersArray = ko.observableArray(markersArray);
 
 
@@ -234,23 +235,53 @@ function viewModel() {
     //});
   //});
 
+  self.filteredList = ko.observableArray();
+
+  self.locationsList().forEach(function (locations) {
+      self.filteredList.push(locations);
+  });
+
   self.filteringFunction = function(locations)  {
 
     var searchInput = self.query().toLowerCase();
+    self.filteredList.removeAll();
 
-      self.locationsList.removeAll();
+    //self.filteredList = ko.observableArray();
+
+
+     //console.log(searchInput);
+
+      //self.locationsList([]);
+      //self.locationsList.removeAll();
+      //self.locationsList.removeAll();
+
+      //console.log(locations);
+
 
       self.locationsList().forEach(function(locations) {
         locations.marker.setVisible(false);
-
-        if (locations.name.toLowerCase().indexOf(searchInput) !== -1) {
-          self.locationsList.push(locations);
-        }
+// !== -1
+       if (locations.name.toLowerCase().indexOf(searchInput) !== -1)
+        //{
+          self.filteredList.push(locations);
+        //return locations.name.toLowerCase().indexOf(self.query().tolowerCase()) >= 0;
+        //};
+        //remove the current location (from forEach) from the visible locationsList
+        //credit: http://www.hostingadvice.com/how-to/javascript-remove-element-array/
+        //else { self.locationsList.splice(self.locationsList.indexOf(locations),1); };
       });
 
-    self.locationsList().forEach(function(locations) {
-      locations.marker.setVisible(true);
-    });
+      console.log(self.locationsList[0]);
+
+      //self.locationsList.removeAll();
+      //self.locationsList.pop(location);
+
+      self.filteredList().forEach(function(locations) {
+          //add the location to visible locationsList
+          //self.locationsList.push(locations);
+          //Make the locations marker visible
+          locations.marker.setVisible(true);
+      });
 
    // var result = locations.name.toLowerCase().indexOf(self.query().toLowerCase());
 
@@ -260,10 +291,10 @@ function viewModel() {
     //    marker.setVisible(true);
     //    return(locations.name)
     //  }
-    };
+  };
 
   //self.search = function(query) {
-    //locationsList.RemoveAll();
+    //locationsList.removeAll();
     //for (var x in locationsList) {
     //  markers[x].setVisible(false);
     //  if (locationsList[x].name.toLowerCase().indexOf(self.query().toLowerCase()) >= 0) {

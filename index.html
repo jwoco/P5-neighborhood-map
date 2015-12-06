@@ -18,7 +18,7 @@
 
 	      <!-- Container for list of places on map -->
  	      <div class="col-md-4" id="list">
- 		     <ul data-bind="foreach: locationsList()">
+ 		     <ul data-bind="foreach: filteredList()">
                <li>
                 <button data-bind="text: name,
                 click: $root.setMarker">
