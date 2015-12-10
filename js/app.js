@@ -2,30 +2,41 @@
 
  var locations = [
   {
-   name: "Lowell, MA",
+   name: "Tsongas Center",
    marker: " ",
-   content: "test 1",
+   wikiURL: 'https://en.wikipedia.org/w/api.php?action=query&titles=Main%20Page&prop=revisions&rvprop=content&format=json',
+   //wikiURL: 'http://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles=Tsongas%Center&callback=wikiCallback',
+   //wikiURL: "http://en.wikipedia.org/w/api.php?action=opensearch&format=json&search=Tsongas%20Center&format=jsonp",
+   //&callback=wikiCallback
+   content: " ",
    latlng: {lat: 42.639444, lng: -71.314722}
   },
   {
     name: "Pawtucket Canal",
     marker: " ",
-    content: "test 2",
+    wikiURL: 'http://en.wikipedia.org//w/api.php?action=opensearch&format=json&search=Pawtucket%20Canal&callback=wikiCallback',
+    content: " ",
     latlng: {lat: 42.644167, lng: -71.305833}
   },
   {
     name: "UMass Lowell",
     marker: " ",
-    content: 'http://en.wikipedia.org/w/api.php?action=opensearch&search=UMass,Lowell&format=json&callback=wikiCallback',
+    wikiURL: 'http://en.wikipedia.org/w/api.php?action=opensearch&format=json&search=UMass%20Lowell&callback=wikiCallback',
+    content: " ",
     latlng: {lat: 42.642716, lng: -71.33453}
   },
   {
-    name: "Roudenbush Center",
+    name: "Lowell Memorial Auditorium",
+    marker: " ",
+    wikiURL: 'http://en.wikipedia.org/w/api.php?action=opensearch&format=json&search=Lowell%20Memorial%20Auditorium&callback=wikiCallback',
+    content: " ",
+    latlng: {lat: 42.645068, lng: -71.304172 }
   },
   {
     name: "Westford Knight",
-    //marker:
-    //content:
+    marker: " ",
+    wikiURL: 'http://en.wikipedia.org/w/api.php?action=opensearch&format=json&search=Westford%20Knight&callback=wikiCallback',
+    content: " ",
     latlng: {lat: 42.587874, lng: -71.434396}
   }
 ];
@@ -54,21 +65,21 @@ function initMap() {
 
 
 
- //For each location, get content from Wikipedia API. Content will be displayed in Google Maps infowindow, when a lcoation marker is clicked.
-    $.ajax({
-        //url: locations[2].wikiURL;
-        url: locations[2].content,
-        dataType: "jsonp",
-        headers: { 'Api-User-Agent': 'MapMashup/1.0 joconnorje@gmail.com' },
+ //For each location, get content from Wikipedia API. Content will be displayed in Google Maps infowindow, when a location marker is clicked.
+    //$.ajax({
+      //  //url: locations[2].wikiURL;
+       // url: locations[2].content,
+        //dataType: "jsonp",
+        //headers: { 'Api-User-Agent': 'MapMashup/1.0 joconnorje@gmail.com' },
      //   method: "POST",
         //url: "http://en.wikipedia.org/w/api.php?action=query&prop=revisions&rvprop=content&format=json&callback=wikiCallback",
         //data: { location: city }
-      })
-      .done(function(data) {
-            //article = locations[2].content;
+      //})
+      //.done(function(data) {
+        //    //article = locations[2].content;
 
-            console.log(data);
-      });
+          //  console.log(data);
+      //});
 
 
     //    var article = response;
@@ -113,7 +124,33 @@ function initMap() {
     //handle my data in here
 //};
 
+//Get content for current location from data model
+// var content = locations[i].content;
 
+
+for (var i = 0; i < locations.length; i++) {
+
+  var wikiCallback = function(data) {
+    console.dir(data[i]);
+  }
+
+$(function() {
+  $.ajax({
+      url: locations[i].wikiURL,
+      dataType: 'jsonp',
+      success: function(data) {
+        console.log('yello');
+        console.log(data);
+        contentString = '<div>' +  '<p>' + data + '</p>' + '</div>';
+        locations[i].content = contentString;
+        console.log(contentString);
+
+      }
+  });
+
+});
+
+}
 
 
 //var currentLocation = locations[2]; // test; don't need these 2 lines
@@ -122,10 +159,11 @@ function initMap() {
 //Define initial infowindow and set content for currentLocation
   var infowindow = new google.maps.InfoWindow(
   {
-   content: 'initial infowindow content'
+   content: 'initial content'
   });
   //};
 
+//locations.forEach
 
 // For each location, create a marker
 //var markersArray = [];
@@ -149,8 +187,45 @@ for (var i = 0; i < locations.length; i++) {
   locations[i].marker = marker; //Add marker to locations data in Model
 
 //Get content for current location from data model
-  var content = locations[i].content;
+ // var content = locations[i].content;
 
+  //For each location, get content from Wikipedia API. Content will be displayed in Google Maps infowindow, when a location marker is clicked.
+  //locations[i].content =
+  //$.ajax({
+    //    url: locations[i].wikiURL,
+      //  //url: locations[2].content,
+      //  dataType: 'jsonp',
+        //headers: { 'Api-User-Agent': 'MapMashup/1.0 joconnorje@gmail.com' },
+      //  type: 'GET',
+        //url: "http://en.wikipedia.org/w/api.php?action=query&prop=revisions&rvprop=content&format=json&callback=wikiCallback",
+        //data: { location: city }
+      //})
+      //.done(function(data) {
+       //     article = locations[i].content;
+
+         //   console.log(article);
+         //   console.log(locations[i].wikiURL);
+      //});
+
+//var wikiCallback = function(data) {
+  //console.dir(data[i]);
+//}
+
+//$(function() {
+  //$.ajax({
+    //  url: locations[i].wikiURL,
+    //  dataType: 'jsonp',
+    //  success: function(data) {
+    //    console.log('yello');
+    //    console.log(data);
+    //    contentString = '<div>' +  '<p>' + data + '</p>' + '</div>';
+    //    locations[i].content = contentString;
+    //    console.log(contentString);
+
+     // }
+  //});
+
+//});
 
 //Add listener for marker and open infowindow with current location content
   marker.addListener('click', (function(markerRef, contentString) {  //on click, open infoWindow
@@ -158,7 +233,7 @@ for (var i = 0; i < locations.length; i++) {
     infowindow.setContent(contentString);
     infowindow.open(map, markerRef);
   }
-  })(marker,content));
+  })(marker,locations.content));
   //var currentMarker = markersArray[2];
 }; //end for loop
 
@@ -202,31 +277,6 @@ function viewModel() {
 
 
 
-  //infoWindow: function(item) {                   infoWindow object should be in Model
-  //  display.infoWindow(item.name.toLowerCase());
-  //},
-
-  //query:
-
-  //to read or write and observables value, you call it as a function
-  //get current observable array (locationsList), then hide/show locations based on search value
-  // var currentLocs = this.locationsList();
-  //
-
-  //self.searchLoc = function(location) {
-   // viewModel.locationsList([]);
-   // for(var x in locationsList()) {
-   //   if (locationsList[x].name.toLowerCase().indexOf(value.toLowerCase()) >= 0)
-   //     viewModel.locationsList.push(locationsList[x]);
-
-   //   console.log(locationsList);
-
-   // }
-  //}
-
-
-  //output = locationsList.filter(filteringFunction);
-
   self.query = ko.observable('');
 
   //self.searchLocationList = ko.computed(function(){
@@ -240,6 +290,9 @@ function viewModel() {
   self.locationsList().forEach(function (locations) {
       self.filteredList.push(locations);
   });
+
+// Use ko binding to user input in Serach box (self.query) to filter the display of locations and markers.
+// http://codepen.io/prather-mcs/pen/KpjbNN
 
   self.filteringFunction = function(locations)  {
 
@@ -271,7 +324,7 @@ function viewModel() {
         //else { self.locationsList.splice(self.locationsList.indexOf(locations),1); };
       });
 
-      console.log(self.locationsList[0]);
+      //console.log(self.locationsList[0]);
 
       //self.locationsList.removeAll();
       //self.locationsList.pop(location);
