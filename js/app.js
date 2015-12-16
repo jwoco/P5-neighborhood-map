@@ -4,39 +4,36 @@
   {
    name: "Tsongas Center",
    marker: " ",
-   wikiURL: 'https://en.wikipedia.org/w/api.php?action=query&titles=Main%20Page&prop=revisions&rvprop=content&format=json',
-   //wikiURL: 'http://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles=Tsongas%Center&callback=wikiCallback',
-   //wikiURL: "http://en.wikipedia.org/w/api.php?action=opensearch&format=json&search=Tsongas%20Center&format=jsonp",
-   //&callback=wikiCallback
-   content: " ",
+   wikiURL: 'http://en.wikipedia.org/w/api.php?action=opensearch&format=json&search=Tsongas%20Center&callback=wikiCallback',
+   content: ' ',
    latlng: {lat: 42.639444, lng: -71.314722}
   },
   {
     name: "Pawtucket Canal",
     marker: " ",
     wikiURL: 'http://en.wikipedia.org//w/api.php?action=opensearch&format=json&search=Pawtucket%20Canal&callback=wikiCallback',
-    content: " ",
+    content: ' ',
     latlng: {lat: 42.644167, lng: -71.305833}
   },
   {
     name: "UMass Lowell",
     marker: " ",
     wikiURL: 'http://en.wikipedia.org/w/api.php?action=opensearch&format=json&search=UMass%20Lowell&callback=wikiCallback',
-    content: " ",
+    content: ' ',
     latlng: {lat: 42.642716, lng: -71.33453}
   },
   {
     name: "Lowell Memorial Auditorium",
     marker: " ",
     wikiURL: 'http://en.wikipedia.org/w/api.php?action=opensearch&format=json&search=Lowell%20Memorial%20Auditorium&callback=wikiCallback',
-    content: " ",
+    content: ' ',
     latlng: {lat: 42.645068, lng: -71.304172 }
   },
   {
     name: "Westford Knight",
     marker: " ",
     wikiURL: 'http://en.wikipedia.org/w/api.php?action=opensearch&format=json&search=Westford%20Knight&callback=wikiCallback',
-    content: " ",
+    content: ' ',
     latlng: {lat: 42.587874, lng: -71.434396}
   }
 ];
@@ -124,6 +121,10 @@ function initMap() {
     //handle my data in here
 //};
 
+//function updateContent(data) {
+//  var contentString;
+//} return contentString = ('<div>' +  '<p>' + data + '</p>' + '</div>');
+
 //Get content for current location from data model
 // var content = locations[i].content;
 
@@ -134,21 +135,26 @@ for (var i = 0; i < locations.length; i++) {
     console.dir(data[i]);
   }
 
+
 $(function() {
   $.ajax({
       url: locations[i].wikiURL,
       dataType: 'jsonp',
       success: function(data) {
-        console.log('yello');
-        console.log(data);
-        contentString = '<div>' +  '<p>' + data + '</p>' + '</div>';
+        //updateContent(data);
+        //console.log(data);
+        var contentString = ('<div>' +  '<p>' + data + '</p>' + '</div>');
         locations[i].content = contentString;
-        console.log(contentString);
+        console.log(locations[i].content);
 
       }
   });
 
 });
+
+//contentString = '<div>' +  '<p>' + data + '</p>' + '</div>';
+        //locations[i].content = data;
+        console.log(locations[i].content);
 
 }
 
@@ -173,7 +179,7 @@ for (var i = 0; i < locations.length; i++) {
     var marker = new google.maps.Marker({
     position: locations[i].latlng,
     map: map,
-    //content: locations.content,
+    content: locations[i].content,
     animation: google.maps.Animation.DROP,
   });
 
