@@ -46,6 +46,7 @@ var Location = function(data) {
   this.latlng = data.latlng;
 }
 
+
 //Create map of Lowell using Google Maps API
 
 function initMap() {
@@ -59,7 +60,7 @@ function initMap() {
   map = new google.maps.Map(document.getElementById('map-container'),mapOptions);
 
 
-  // Run viewModel here so that map is available to the viewModel
+// Run viewModel here so that map is available to the viewModel
 ko.applyBindings(new viewModel() );
 
 }; //end of initMap
@@ -70,7 +71,7 @@ function viewModel() {
 
   //self.locationsList = ko.observableArray(locations.slice(0));
   self.locationsList = ko.observableArray([]);
-  self.filteredList = ko.observableArray();
+  //self.filteredList = ko.observableArray([]);
   //self.markersList = ko.observableArray(locations.marker);
   //self.markersArray = ko.observableArray(markersArray);
 
@@ -84,17 +85,31 @@ function viewModel() {
 
 function getContent(locationItem) {
 
+  var contentString;
+
+  //var wikiRequestTimeout = setTimeout(function(){
+    //contentString = ('failed to get wikipedia resource');
+  //}, 8000);
+
     $.ajax({
       url: locationItem.wikiURL,
       dataType: 'jsonp',
       success: function(data) {
-        var contentString = ('<div>' +  '<p>' + data[0] + '</p>'
+        contentString = ('<div>' +  '<p>' + '<strong>' + data[0] + '</strong>' + '</p>'
           + '<p>' + data[2] + '</p>'
           + '</div>'
           );
         locationItem.content = contentString;
-        return(contentString);
+        return(contentString)
+
+        //clearTimeout(wikiRequestTimeout);
+      },
+      fail: function(data) {
+          contentString = ('<div>' + '<p>' + 'failed to get wikipedia resource' + '</p>' + '</div>');
+          locationItem.content = contentString;
+          return(contentString)
       }
+
     });
 
 }
@@ -146,22 +161,19 @@ console.log(self.locationsList()[0]);
     console.log('click works');
     console.log(locationItem);
     locationItem.marker.setAnimation(google.maps.Animation.DROP); //activate associated marker
-    //infowindow.setContent(locations.content); //infowindow, map not available in local scope?
     google.maps.event.trigger(locationItem.marker, 'click'); //open infowindow associated with marker
-    //var infowindow = new google.maps.InfoWindow({
-    //});
-    //infowindow.open(map,locations.marker);
   }
 
-  //holds Search input
-  self.query = ko.observable('');
 
   //Create a copy of the locations list to use to filter the list in response to search input
   self.filteredList = ko.observableArray();
 
-  locations.forEach(function (locations) {
-      self.filteredList.push(locations);
+  locations.forEach(function (locationItem) {
+      self.filteredList.push(new Location(locationItem) );
   });
+
+  //holds Search input
+  self.query = ko.observable('');
 
 
 // Use ko binding to user input in Search box (self.query) to filter the display of locations and markers.
