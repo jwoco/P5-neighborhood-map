@@ -121,7 +121,7 @@ function getContent(locationItem) {
 
   // Create the locations using the Location constructor and add to the locationsList array
   locations.forEach(function(locationItem) {
-    self.locationsList.push(new Location(locationItem) );
+   // self.locationsList.push(new Location(locationItem) );
   //});
 
   //create a marker on the map for each location
@@ -156,6 +156,8 @@ function getContent(locationItem) {
     infowindow.open(map, markerRef);
   }
   })(locationItem.marker,locationItem.content));
+
+   self.locationsList.push(new Location(locationItem) );
 }); //end forEach
 
 console.log(self.locationsList()[0]);
