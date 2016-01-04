@@ -4,3 +4,4 @@ html, body { height: 100%; margin: 0; padding: 0; }
 			padding:20px;
 }
 #map {height: 100%}
+#list ul { list-style-type: none; }

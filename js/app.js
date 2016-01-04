@@ -65,6 +65,10 @@ ko.applyBindings(new viewModel() );
 
 }; //end of initMap
 
+//if typeof(google) = null {
+  //alert("Google Maps not available. Check Internet connection.")
+//};
+
 function viewModel() {
   var self = this;
 
@@ -104,8 +108,8 @@ function getContent(locationItem) {
 
         //clearTimeout(wikiRequestTimeout);
       },
-      fail: function(data) {
-          contentString = ('<div>' + '<p>' + 'failed to get wikipedia resource' + '</p>' + '</div>');
+      error: function(data) {
+          contentString = ('<div>' + '<p>' + 'Failed to get Wikipedia resource. Check your Internet connection.' + '</p>' + '</div>');
           locationItem.content = contentString;
           return(contentString)
       }
@@ -118,10 +122,10 @@ function getContent(locationItem) {
   // Create the locations using the Location constructor and add to the locationsList array
   locations.forEach(function(locationItem) {
     self.locationsList.push(new Location(locationItem) );
-  });
+  //});
 
   //create a marker on the map for each location
-  self.locationsList().forEach(function(locationItem) {
+  //self.locationsList().forEach(function(locationItem) {
     var markerOptions = {
       map: map,
       position: locationItem.latlng,
@@ -129,21 +133,21 @@ function getContent(locationItem) {
     };
 
   locationItem.marker = new google.maps.Marker(markerOptions);
-  }); //end forEach
+  //}); //end forEach
 
   //Create wiki content for infowindow for each location
-  self.locationsList().forEach(function(locationItem) {
+  //self.locationsList().forEach(function(locationItem) {
     //getContent(locationItem);
     var contentString = getContent(locationItem);
     locationItem.content = contentString;
     //infowindow.setContent(locationItem.content);
     //console.log(contentString);
     //console.log(locationItem.content);
-  });
+  //});
 
 
 //Add listener for marker and open infowindow with current location content
-self.locationsList().forEach(function(locationItem) {
+//self.locationsList().forEach(function(locationItem) {
   locationItem.marker.addListener('click', (function(markerRef, contentString) {  //on click, open infoWindow
     return function() {
     //var contentString = this.content;
@@ -166,11 +170,12 @@ console.log(self.locationsList()[0]);
 
 
   //Create a copy of the locations list to use to filter the list in response to search input
-  self.filteredList = ko.observableArray();
+  self.filteredList = ko.observableArray([]);
 
   locations.forEach(function (locationItem) {
-      self.filteredList.push(new Location(locationItem) );
+    self.filteredList.push(new Location(locationItem) );
   });
+
 
   //holds Search input
   self.query = ko.observable('');
