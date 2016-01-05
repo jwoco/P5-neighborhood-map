@@ -1,4 +1,4 @@
-// Model - contains data used by the ViewModel and user interface
+// Model - contains data used by the ViewModel to construct the location information and by the user interface to show map markers and Wikipedia content
 
  var locations = [
   {
@@ -38,6 +38,7 @@
   }
 ];
 
+//Constructor function for Locations
 var Location = function(data) {
   this.name = data.name;
   this.marker = data.marker;
@@ -46,9 +47,7 @@ var Location = function(data) {
   this.latlng = data.latlng;
 }
 
-
 //Create map of Lowell using Google Maps API
-
 function initMap() {
 
   var lowell = {lat: 42.639444, lng: -71.314722};
@@ -58,7 +57,6 @@ function initMap() {
     disableDefaultUI: true
   }
   map = new google.maps.Map(document.getElementById('map-container'),mapOptions);
-
 
 // Run viewModel here so that map is available to the viewModel
 ko.applyBindings(new viewModel() );
@@ -72,12 +70,7 @@ ko.applyBindings(new viewModel() );
 function viewModel() {
   var self = this;
 
-
-  //self.locationsList = ko.observableArray(locations.slice(0));
   self.locationsList = ko.observableArray([]);
-  //self.filteredList = ko.observableArray([]);
-  //self.markersList = ko.observableArray(locations.marker);
-  //self.markersArray = ko.observableArray(markersArray);
 
   //Define initial infowindow and set content for currentLocation
   var infowindow = new google.maps.InfoWindow(
@@ -85,15 +78,9 @@ function viewModel() {
    content: 'initial content'
   });
 
-
-
 function getContent(locationItem) {
 
   var contentString;
-
-  //var wikiRequestTimeout = setTimeout(function(){
-    //contentString = ('failed to get wikipedia resource');
-  //}, 8000);
 
     $.ajax({
       url: locationItem.wikiURL,
@@ -105,27 +92,20 @@ function getContent(locationItem) {
           );
         locationItem.content = contentString;
         return(contentString)
-
-        //clearTimeout(wikiRequestTimeout);
       },
+      //Display error message if Wikipedia is unreachable
       error: function(data) {
           contentString = ('<div>' + '<p>' + 'Failed to get Wikipedia resource. Check your Internet connection.' + '</p>' + '</div>');
           locationItem.content = contentString;
           return(contentString)
       }
-
     });
-
 }
-
 
   // Create the locations using the Location constructor and add to the locationsList array
   locations.forEach(function(locationItem) {
-   // self.locationsList.push(new Location(locationItem) );
-  //});
 
   //create a marker on the map for each location
-  //self.locationsList().forEach(function(locationItem) {
     var markerOptions = {
       map: map,
       position: locationItem.latlng,
@@ -133,30 +113,21 @@ function getContent(locationItem) {
     };
 
   locationItem.marker = new google.maps.Marker(markerOptions);
-  //}); //end forEach
 
   //Create wiki content for infowindow for each location
-  //self.locationsList().forEach(function(locationItem) {
-    //getContent(locationItem);
     var contentString = getContent(locationItem);
     locationItem.content = contentString;
-    //infowindow.setContent(locationItem.content);
-    //console.log(contentString);
-    //console.log(locationItem.content);
-  //});
 
 
 //Add listener for marker and open infowindow with current location content
-//self.locationsList().forEach(function(locationItem) {
   locationItem.marker.addListener('click', (function(markerRef, contentString) {  //on click, open infoWindow
     return function() {
-    //var contentString = this.content;
     infowindow.setContent(locationItem.content);
-    //locationItem.marker.setAnimation(google.maps.Animation.DROP); //activate associated marker
     infowindow.open(map, markerRef);
   }
   })(locationItem.marker,locationItem.content));
 
+   //Call the Location contrsuctor and push locations to the array
    self.locationsList.push(new Location(locationItem) );
 }); //end forEach
 
@@ -201,20 +172,15 @@ console.log(self.locationsList()[0]);
 
       });
 
-
+      //Make the text markers visible for selected locations
       self.filteredList().forEach(function(locations) {
-          //add the location to visible locationsList
-          //self.locationsList.push(locations);
-          //Make the locations marker visible
           locations.marker.setVisible(true);
       });
 
-  };
-
+  }; //end filtering function
 
 }; //end of ViewModel
-// Run it
-//ko.applyBindings(new viewModel() );
+
 
 
 
