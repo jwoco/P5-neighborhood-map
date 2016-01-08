@@ -6,14 +6,14 @@
    marker: ' ',
    wikiURL: 'http://en.wikipedia.org/w/api.php?action=opensearch&format=json&search=Tsongas%20Center&callback=wikiCallback',
    content: ' ',
-   latlng: {lat: 42.639444, lng: -71.314722}
+   latlng: {lat: 42.6502938, lng: -71.3132567}
   },
   {
-    name: 'Pawtucket Canal',
+    name: 'Lowell National Historical Park',
     marker: ' ',
-    wikiURL: 'http://en.wikipedia.org//w/api.php?action=opensearch&format=json&search=Pawtucket%20Canal&callback=wikiCallback',
+    wikiURL: 'http://en.wikipedia.org//w/api.php?action=opensearch&format=json&search=Lowell%20National%20Historical%20Park&callback=wikiCallback',
     content: ' ',
-    latlng: {lat: 42.644167, lng: -71.305833}
+    latlng: {lat: 42.644667, lng: -71.310278}
   },
   {
     name: 'UMass Lowell',
@@ -27,14 +27,14 @@
     marker: ' ',
     wikiURL: 'http://en.wikipedia.org/w/api.php?action=opensearch&format=json&search=Lowell%20Memorial%20Auditorium&callback=wikiCallback',
     content: ' ',
-    latlng: {lat: 42.645068, lng: -71.304172 }
+    latlng: {lat: 42.645102, lng: -71.304143 }
   },
   {
-    name: 'Westford Knight',
+    name: 'American Textile History Museum',
     marker: ' '  ,
-    wikiURL: 'http://en.wikipedia.org/w/api.php?action=opensearch&format=json&search=Westford%20Knight&callback=wikiCallback',
+    wikiURL: 'http://en.wikipedia.org/w/api.php?action=opensearch&format=json&search=American%20Textile%20History%20Museum&callback=wikiCallback',
     content: ' ',
-    latlng: {lat: 42.587874, lng: -71.434396}
+    latlng: {lat: 42.6419896, lng: -71.3170049}
   }
 ];
 
@@ -50,7 +50,7 @@ var Location = function(data) {
 //Create map of Lowell using Google Maps API
 function initMap() {
 
-  var lowell = {lat: 42.639444, lng: -71.314722};
+  var lowell = {lat: 42.6419896, lng: -71.3170049};
   var mapOptions = {
     center: lowell,
     zoom: 14,
